@@ -1,0 +1,15 @@
+{
+  "exclude": ["node_modules", "lib", "__tests__"],
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "outDir": "./lib",
+    "removeComments": false,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es6"
+  }
+}
