@@ -3,23 +3,26 @@ const HEADER_SIZE = 16;
 const VERSION = 1;
 const RESERVED = "\x00\x00\x00";
 
-// \x1a is Onkyo's EOF byte
-const dataRegexp = /!1(...)(.*)\x1a(?:\r|\n|\r\n)/;
+// \x19 and \x1a are Onkyo's terminator bytes
+const dataRegexp = /!(.)(...)(.*)[\x19\x1a](?:\r|\n|\r\n)/;
+export const PORT = 60128;
 
 export class Packet {
   public command: string;
   public parameter: string;
+  public deviceType: string;
 
-  constructor(command: string, parameter: string) {
+  constructor(command: string, parameter: string, deviceType: string = "1") {
     this.command = command;
     this.parameter = parameter;
+    this.deviceType = deviceType;
   }
 
   /**
    * Creates a new Buffer from the Packet to be sent to the device.
    */
   toBuffer() {
-    const data = `!1${this.command}${this.parameter}\r`;
+    const data = `!${this.deviceType}${this.command}${this.parameter}\r`;
     const buf = Buffer.alloc(HEADER_SIZE + data.length);
     buf.write(MAGIC, 0, 4, "ascii");
     buf.writeUInt32BE(HEADER_SIZE, 4);
@@ -59,6 +62,12 @@ export class Packet {
       throw new Error(`invalid data (${data})`);
     }
 
-    return new Packet(matches[1], matches[2]);
+    const [_, deviceType, command, parameter] = matches;
+    return new Packet(command, parameter, deviceType);
   }
 }
+
+export const DISCOVER_BUFFERS = [
+  new Packet("ECN", "QSTN", "x").toBuffer(),
+  new Packet("ECN", "QSTN", "p").toBuffer()
+];
