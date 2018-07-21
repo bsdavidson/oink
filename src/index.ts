@@ -1,2 +1,2 @@
 export {Packet} from "./protocol";
-export {Device, discover} from "./device";
+export {Device, discover, DiscoveredDevice} from "./device";

@@ -2,38 +2,95 @@ import dgram from "dgram";
 import net from "net";
 
 import {Packet, DISCOVER_BUFFERS, PORT} from "./protocol";
+import {EventEmitter} from "events";
 
-export class Device {
+type ReadPacketCallback = (packet: Packet) => void;
+
+function readPackets(socket: net.Socket, callback: ReadPacketCallback) {
+  const buffer = Buffer.alloc(256);
+  let offset = 0;
+  socket.on("data", buf => {
+    const oldOffset = offset;
+    buffer.set(buf, offset);
+    offset += buf.length;
+
+    if (!buf.slice(oldOffset, offset).includes("\x0d", 0)) {
+      return;
+    }
+    const packet = Packet.fromBuffer(buffer.slice(0, offset));
+    if (packet) {
+      callback(packet);
+    }
+    offset = 0;
+  });
+}
+
+export class Device extends EventEmitter {
+  public socket?: net.Socket;
+  public connectPromise?: Promise<net.Socket>;
+
   constructor(
     public address: string,
     public port: number,
     public type: string
-  ) {}
+  ) {
+    super();
+  }
 
-  connect() {
-    return new Promise((resolve, reject) => {
+  get connected(): boolean {
+    return this.socket !== undefined;
+  }
+
+  connect(): Promise<net.Socket> {
+    if (this.connectPromise) {
+      return this.connectPromise;
+    } else if (this.socket) {
+      return Promise.resolve(this.socket);
+    }
+
+    this.connectPromise = new Promise((resolve, reject) => {
       let finished = false;
       const socket = new net.Socket();
 
-      function finish(err?: Error) {
+      const finish = (err?: Error) => {
         if (finished) {
           return;
         }
         finished = true;
+        this.connectPromise = undefined;
         if (err) {
+          this.socket = undefined;
           socket.end();
           reject(err);
           return;
         }
+        this.socket = socket;
         resolve();
-      }
+        readPackets(this.socket, packet => {
+          this.emit("data", packet);
+        });
+      };
 
       socket.setTimeout(1000);
       socket.once("connect", () => finish());
       socket.once("error", err => finish(err));
       socket.once("timeout", () => finish(new Error("connection timed out")));
+
       socket.connect({host: this.address, port: this.port});
     });
+
+    return this.connectPromise;
+  }
+
+  send(command: string, parameter: string, deviceType: string): void {
+    if (!this.socket) {
+      throw new Error("device not connected");
+    }
+
+    const buf = new Packet(command, parameter, deviceType).toBuffer();
+    if (buf) {
+      this.socket.write(buf);
+    }
   }
 }
 
@@ -78,7 +135,10 @@ export class DiscoveredDevice {
   }
 }
 
-export function discover({deviceLimit = Infinity, timeLimit = 1000} = {}) {
+export function discover({
+  deviceLimit = Infinity,
+  timeLimit = 1000
+} = {}): Promise<DiscoveredDevice[]> {
   return new Promise((resolve, reject) => {
     const socket = dgram.createSocket("udp4");
     const devices: DiscoveredDevice[] = [];

@@ -4,7 +4,7 @@ jest.mock("net");
 import dgram from "dgram";
 import net from "net";
 
-import {DISCOVER_BUFFERS, PORT} from "../src/protocol";
+import {DISCOVER_BUFFERS, PORT, Packet} from "../src/protocol";
 import {discover, DiscoveredDevice, Device} from "../src/device";
 import {EventEmitter} from "events";
 
@@ -87,6 +87,7 @@ class MockSocket extends EventEmitter {
   public connect = jest.fn();
   public setTimeout = jest.fn();
   public end = jest.fn();
+  public write = jest.fn();
 }
 
 test("DiscoveredDevice.toDevice() should return a device", () => {
@@ -156,4 +157,38 @@ test("Device.connect() should reject when errored", async () => {
     expect(err).toEqual(new Error("🥒 PICKLERICK!"));
     expect(socket.end.mock.calls.length).toBe(1);
   }
+});
+
+test("Device.send() should emit a packet to send to the connected socket", async () => {
+  const socket = new MockSocket();
+  socket.connect.mockImplementationOnce(() => socket.emit("connect"));
+  net.Socket.mockImplementationOnce(() => socket);
+
+  const device = new Device("1.2.3.4", PORT, "1");
+
+  await device.connect();
+  device.send("MVL", "01", "1");
+  expect(socket.write.mock.calls).toEqual([
+    [new Packet("MVL", "01", "1").toBuffer()]
+  ]);
+});
+
+test("Device should handle broken data", async () => {
+  const socket = new MockSocket();
+  socket.connect.mockImplementationOnce(() => socket.emit("connect"));
+  net.Socket.mockImplementationOnce(() => socket);
+
+  const device = new Device("1.2.3.4", PORT, "1");
+  await device.connect();
+
+  device.on("data", data => {
+    expect(data.command).toEqual("ECN");
+    expect(data.parameter).toEqual("DRX-3/60128/DX/001422012345");
+    expect(data.deviceType).toEqual("1");
+  });
+
+  const packet = createPacketBuffer();
+  socket.emit("data", packet.slice(0, 10));
+  socket.emit("data", packet.slice(10, 20));
+  socket.emit("data", packet.slice(20, packet.length));
 });
