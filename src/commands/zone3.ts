@@ -1,7 +1,182 @@
 import { Packet } from "../protocol";
 
 /**
- * Zone3 Power Command
+ * Zone3 Balance Command (BL3)
+ */
+export function balance(value: string) {
+  return new Packet("BL3", value);
+}
+export namespace balance {
+  /** sets Balance Down (to L 1 Step) */
+  export const down = () => balance("DOWN");
+
+  /** gets Zone3 Balance */
+  export const query = () => balance("QSTN");
+
+  /** sets Balance Up (to R 1 Step) */
+  export const up = () => balance("UP");
+}
+
+/**
+ * Zone3 Muting Command (MT3)
+ */
+export function muting(value: string) {
+  return new Packet("MT3", value);
+}
+export namespace muting {
+  /** sets Zone3 Muting Off */
+  export const off = () => muting("00");
+
+  /** sets Zone3 Muting On */
+  export const on = () => muting("01");
+
+  /** gets the Zone3 Muting Status */
+  export const query = () => muting("QSTN");
+
+  /** sets Zone3 Muting Wrap-Around */
+  export const toggle = () => muting("TG");
+}
+
+/**
+ * Internet Radio Preset Command (Network Model Only) (NP3)
+ */
+export function internetRadioPreset(value: string) {
+  return new Packet("NP3", value);
+}
+export namespace internetRadioPreset {
+
+}
+
+/**
+ * Net-Tune/Network Operation Command(Network Model Only) (NT3)
+ */
+export function netTuneNetworkZone(value: string) {
+  return new Packet("NT3", value);
+}
+export namespace netTuneNetworkZone {
+  /** CH DOWNP(for iRadio) */
+  export const chdn = () => netTuneNetworkZone("CHDN");
+
+  /** CH UP(for iRadio) */
+  export const chup = () => netTuneNetworkZone("CHUP");
+
+  /** DISPLAY KEY(for iPod 1wire) */
+  export const display = () => netTuneNetworkZone("DISPLAY");
+
+  /** DOWN KEY(for iPod 1wire) */
+  export const down = () => netTuneNetworkZone("DOWN");
+
+  /** FF KEY (CONTINUOUS*) (for iPod 1wire) */
+  export const ff = () => netTuneNetworkZone("FF");
+
+  /** LEFT KEY(for iPod 1wire) */
+  export const left = () => netTuneNetworkZone("LEFT");
+
+  /** MEMORY KEY */
+  export const memory = () => netTuneNetworkZone("MEMORY");
+
+  /** PLAY / PAUSE KEY */
+  export const playPause = () => netTuneNetworkZone("P/P");
+
+  /** PAUSE KEY */
+  export const pause = () => netTuneNetworkZone("PAUSE");
+
+  /** PLAY KEY */
+  export const play = () => netTuneNetworkZone("PLAY");
+
+  /** RANDOM KEY(for iPod 1wire) */
+  export const random = () => netTuneNetworkZone("RANDOM");
+
+  /** REPEAT / SHUFFLE KEY */
+  export const repeatShuffle = () => netTuneNetworkZone("REP/SHF");
+
+  /** REPEAT KEY(for iPod 1wire) */
+  export const repeat = () => netTuneNetworkZone("REPEAT");
+
+  /** RETURN KEY(for iPod 1wire) */
+  export const return_ = () => netTuneNetworkZone("RETURN");
+
+  /** REW KEY (CONTINUOUS*) (for iPod 1wire) */
+  export const rew = () => netTuneNetworkZone("REW");
+
+  /** RIGHT KEY(for iPod 1wire) */
+  export const right = () => netTuneNetworkZone("RIGHT");
+
+  /** SELECT KEY(for iPod 1wire) */
+  export const select = () => netTuneNetworkZone("SELECT");
+
+  /** STOP KEY */
+  export const stop = () => netTuneNetworkZone("STOP");
+
+  /** TRACK DOWN KEY */
+  export const trdn = () => netTuneNetworkZone("TRDN");
+
+  /** TRACK UP KEY */
+  export const trup = () => netTuneNetworkZone("TRUP");
+
+  /** UP KEY(for iPod 1wire) */
+  export const up = () => netTuneNetworkZone("UP");
+}
+
+/**
+ * Net-Tune/Network Operation Command(Net-Tune Model Only) (NTC)
+ */
+export function netTuneNetwork(value: string) {
+  return new Packet("NTC", value);
+}
+export namespace netTuneNetwork {
+  /** PAUSE KEY */
+  export const pausez = () => netTuneNetwork("PAUSEz");
+
+  /** PLAY KEY */
+  export const playz = () => netTuneNetwork("PLAYz");
+
+  /** STOP KEY */
+  export const stopz = () => netTuneNetwork("STOPz");
+
+  /** TRACK DOWN KEY */
+  export const trdnz = () => netTuneNetwork("TRDNz");
+
+  /** TRACK UP KEY */
+  export const trupz = () => netTuneNetwork("TRUPz");
+}
+
+/**
+ * Preset Command (PR3)
+ */
+export function presetZone(value: string) {
+  return new Packet("PR3", value);
+}
+export namespace presetZone {
+  /** sets Preset No. Wrap-Around Down */
+  export const down = () => presetZone("DOWN");
+
+  /** gets The Preset No. */
+  export const query = () => presetZone("QSTN");
+
+  /** sets Preset No. Wrap-Around Up */
+  export const up = () => presetZone("UP");
+}
+
+/**
+ * Preset Command (PRS)
+ */
+export function preset(value: string) {
+  return new Packet("PRS", value);
+}
+export namespace preset {
+  /** sets Preset No. Wrap-Around Down */
+  export const down = () => preset("DOWN");
+
+  /** gets The Preset No. */
+  export const query = () => preset("QSTN");
+
+  /** sets Preset No. Wrap-Around Up */
+  export const up = () => preset("UP");
+}
+
+/**
+ * Zone3 Power Command (PW3)
  */
 export function power(value: string) {
   return new Packet("PW3", value);
@@ -18,95 +193,42 @@ export namespace power {
 }
 
 /**
- * Zone3 Muting Command
- */
-export function muting(value: string) {
-  return new Packet("MT3", value);
-}
-export namespace muting {
-  /** sets Zone3 Muting Off */
-  export const off = () => muting("00");
-
-  /** sets Zone3 Muting On */
-  export const on = () => muting("01");
-
-  /** sets Zone3 Muting Wrap-Around */
-  export const toggle = () => muting("TG");
-
-  /** gets the Zone3 Muting Status */
-  export const query = () => muting("QSTN");
-}
-
-/**
- * Zone3 Volume Command
- */
-export function volume(value: string) {
-  return new Packet("VL3", value);
-}
-export namespace volume {
-  /** sets Volume Level Up */
-  export const levelUp = () => volume("UP");
-
-  /** sets Volume Level Down */
-  export const levelDown = () => volume("DOWN");
-
-  /** sets Volume Level Up 1dB Step */
-  export const levelUp1dbStep = () => volume("UP1");
-
-  /** sets Volume Level Down 1dB Step */
-  export const levelDown1dbStep = () => volume("DOWN1");
-
-  /** gets the Volume Level */
-  export const query = () => volume("QSTN");
-}
-
-/**
- * Zone3 Tone Command
- */
-export function tone(value: string) {
-  return new Packet("TN3", value);
-}
-export namespace tone {
-  /** sets Bass Up (1 Step) */
-  export const bassUp = () => tone("BUP");
-
-  /** sets Bass Down (1 Step) */
-  export const bassDown = () => tone("BDOWN");
-
-  /** sets Treble Up (1 Step) */
-  export const trebleUp = () => tone("TUP");
-
-  /** sets Treble Down (1 Step) */
-  export const trebleDown = () => tone("TDOWN");
-
-  /** gets Zone3 Tone ("BxxTxx") */
-  export const query = () => tone("QSTN");
-}
-
-/**
- * Zone3 Balance Command
- */
-export function balance(value: string) {
-  return new Packet("BL3", value);
-}
-export namespace balance {
-  /** sets Balance Up (to R 1 Step) */
-  export const up = () => balance("UP");
-
-  /** sets Balance Down (to L 1 Step) */
-  export const down = () => balance("DOWN");
-
-  /** gets Zone3 Balance */
-  export const query = () => balance("QSTN");
-}
-
-/**
- * ZONE3 Selector Command
+ * ZONE3 Selector Command (SL3)
  */
 export function selector(value: string) {
   return new Packet("SL3", value);
 }
 export namespace selector {
+  /** sets VIDEO1, VCR/DVR, STB/DVR */
+  export const video1 = () => selector("00");
+
+  /** sets VIDEO2, CBL/SAT */
+  export const video2 = () => selector("01");
+
+  /** sets VIDEO3, GAME/TV, GAME, GAME1 */
+  export const video3 = () => selector("02");
+
+  /** sets VIDEO4, AUX1(AUX) */
+  export const video4 = () => selector("03");
+
+  /** sets VIDEO5, AUX2, GAME2 */
+  export const video5 = () => selector("04");
+
+  /** sets VIDEO6, PC */
+  export const video6 = () => selector("05");
+
+  /** sets VIDEO7 */
+  export const video7 = () => selector("06");
+
+  /** sets Hidden1, EXTRA1 */
+  export const hidden1 = () => selector("07");
+
+  /** sets Hidden2, EXTRA2 */
+  export const hidden2 = () => selector("08");
+
+  /** sets Hidden3, EXTRA3 */
+  export const hidden3 = () => selector("09");
+
   /** sets DVD */
   export const dvd = () => selector("10");
 
@@ -146,6 +268,21 @@ export namespace selector {
   /** sets USB/USB(Front) */
   export const usbFront = () => selector("29");
 
+  /** sets USB(Rear) */
+  export const usbRear = () => selector("2A");
+
+  /** sets NETWORK, NET */
+  export const network = () => selector("2B");
+
+  /** sets USB(toggle) */
+  export const usbToggle = () => selector("2C");
+
+  /** sets Airplay */
+  export const airplay = () => selector("2D");
+
+  /** sets Bluetooth */
+  export const bluetooth = () => selector("2E");
+
   /** sets MULTI CH */
   export const multiCh = () => selector("30");
 
@@ -164,80 +301,41 @@ export namespace selector {
   /** sets SOURCE */
   export const source = () => selector("80");
 
-  /** sets VIDEO1, VCR/DVR, STB/DVR */
-  export const video1 = () => selector("00");
-
-  /** sets VIDEO2, CBL/SAT */
-  export const video2 = () => selector("01");
-
-  /** sets VIDEO3, GAME/TV, GAME, GAME1 */
-  export const video3 = () => selector("02");
-
-  /** sets VIDEO4, AUX1(AUX) */
-  export const video4 = () => selector("03");
-
-  /** sets VIDEO5, AUX2, GAME2 */
-  export const video5 = () => selector("04");
-
-  /** sets VIDEO6, PC */
-  export const video6 = () => selector("05");
-
-  /** sets VIDEO7 */
-  export const video7 = () => selector("06");
-
-  /** sets Hidden1, EXTRA1 */
-  export const hidden1 = () => selector("07");
-
-  /** sets Hidden2, EXTRA2 */
-  export const hidden2 = () => selector("08");
-
-  /** sets Hidden3, EXTRA3 */
-  export const hidden3 = () => selector("09");
-
-  /** sets USB(Rear) */
-  export const usbRear = () => selector("2A");
-
-  /** sets NETWORK, NET */
-  export const network = () => selector("2B");
-
-  /** sets USB(toggle) */
-  export const usbToggle = () => selector("2C");
-
-  /** sets Airplay */
-  export const airplay = () => selector("2D");
-
-  /** sets Bluetooth */
-  export const bluetooth = () => selector("2E");
-
-  /** sets Selector Position Wrap-Around Up */
-  export const up = () => selector("UP");
-
   /** sets Selector Position Wrap-Around Down */
   export const down = () => selector("DOWN");
 
   /** gets The Selector Position */
   export const query = () => selector("QSTN");
+
+  /** sets Selector Position Wrap-Around Up */
+  export const up = () => selector("UP");
 }
 
 /**
- * Tuning Command
+ * Zone3 Tone Command (TN3)
  */
-export function tuning(value: string) {
-  return new Packet("TUN", value);
+export function tone(value: string) {
+  return new Packet("TN3", value);
 }
-export namespace tuning {
-  /** sets Tuning Frequency Wrap-Around Up */
-  export const up = () => tuning("UP");
+export namespace tone {
+  /** sets Bass Down (1 Step) */
+  export const bassDown = () => tone("BDOWN");
 
-  /** sets Tuning Frequency Wrap-Around Down */
-  export const down = () => tuning("DOWN");
+  /** sets Bass Up (1 Step) */
+  export const bassUp = () => tone("BUP");
 
-  /** gets The Tuning Frequency */
-  export const query = () => tuning("QSTN");
+  /** gets Zone3 Tone ("BxxTxx") */
+  export const query = () => tone("QSTN");
+
+  /** sets Treble Down (1 Step) */
+  export const trebleDown = () => tone("TDOWN");
+
+  /** sets Treble Up (1 Step) */
+  export const trebleUp = () => tone("TUP");
 }
 
 /**
- * Tuning Command
+ * Tuning Command (TU3)
  */
 export function tuningZone(value: string) {
   return new Packet("TU3", value);
@@ -279,150 +377,52 @@ export namespace tuningZone {
   /** starts/restarts Direct Tuning Mode */
   export const direct = () => tuningZone("DIRECT");
 
-  /** sets Tuning Frequency Wrap-Around Up */
-  export const up = () => tuningZone("UP");
-
   /** sets Tuning Frequency Wrap-Around Down */
   export const down = () => tuningZone("DOWN");
 
   /** gets The Tuning Frequency */
   export const query = () => tuningZone("QSTN");
+
+  /** sets Tuning Frequency Wrap-Around Up */
+  export const up = () => tuningZone("UP");
 }
 
 /**
- * Preset Command
+ * Tuning Command (TUN)
  */
-export function preset(value: string) {
-  return new Packet("PRS", value);
+export function tuning(value: string) {
+  return new Packet("TUN", value);
 }
-export namespace preset {
-  /** sets Preset No. Wrap-Around Up */
-  export const up = () => preset("UP");
+export namespace tuning {
+  /** sets Tuning Frequency Wrap-Around Down */
+  export const down = () => tuning("DOWN");
 
-  /** sets Preset No. Wrap-Around Down */
-  export const down = () => preset("DOWN");
+  /** gets The Tuning Frequency */
+  export const query = () => tuning("QSTN");
 
-  /** gets The Preset No. */
-  export const query = () => preset("QSTN");
+  /** sets Tuning Frequency Wrap-Around Up */
+  export const up = () => tuning("UP");
 }
 
 /**
- * Preset Command
+ * Zone3 Volume Command (VL3)
  */
-export function presetZone(value: string) {
-  return new Packet("PR3", value);
+export function volume(value: string) {
+  return new Packet("VL3", value);
 }
-export namespace presetZone {
-  /** sets Preset No. Wrap-Around Up */
-  export const up = () => presetZone("UP");
+export namespace volume {
+  /** sets Volume Level Down */
+  export const levelDown = () => volume("DOWN");
 
-  /** sets Preset No. Wrap-Around Down */
-  export const down = () => presetZone("DOWN");
+  /** sets Volume Level Down 1dB Step */
+  export const levelDown1dbStep = () => volume("DOWN1");
 
-  /** gets The Preset No. */
-  export const query = () => presetZone("QSTN");
-}
+  /** gets the Volume Level */
+  export const query = () => volume("QSTN");
 
-/**
- * Net-Tune/Network Operation Command(Net-Tune Model Only)
- */
-export function netTuneNetwork(value: string) {
-  return new Packet("NTC", value);
-}
-export namespace netTuneNetwork {
-  /** PLAY KEY */
-  export const playz = () => netTuneNetwork("PLAYz");
+  /** sets Volume Level Up */
+  export const levelUp = () => volume("UP");
 
-  /** STOP KEY */
-  export const stopz = () => netTuneNetwork("STOPz");
-
-  /** PAUSE KEY */
-  export const pausez = () => netTuneNetwork("PAUSEz");
-
-  /** TRACK UP KEY */
-  export const trupz = () => netTuneNetwork("TRUPz");
-
-  /** TRACK DOWN KEY */
-  export const trdnz = () => netTuneNetwork("TRDNz");
-}
-
-/**
- * Net-Tune/Network Operation Command(Network Model Only)
- */
-export function netTuneNetworkZone(value: string) {
-  return new Packet("NT3", value);
-}
-export namespace netTuneNetworkZone {
-  /** PLAY KEY */
-  export const play = () => netTuneNetworkZone("PLAY");
-
-  /** STOP KEY */
-  export const stop = () => netTuneNetworkZone("STOP");
-
-  /** PAUSE KEY */
-  export const pause = () => netTuneNetworkZone("PAUSE");
-
-  /** PLAY / PAUSE KEY */
-  export const playPause = () => netTuneNetworkZone("P/P");
-
-  /** TRACK UP KEY */
-  export const trup = () => netTuneNetworkZone("TRUP");
-
-  /** TRACK DOWN KEY */
-  export const trdn = () => netTuneNetworkZone("TRDN");
-
-  /** CH UP(for iRadio) */
-  export const chup = () => netTuneNetworkZone("CHUP");
-
-  /** CH DOWNP(for iRadio) */
-  export const chdn = () => netTuneNetworkZone("CHDN");
-
-  /** FF KEY (CONTINUOUS*) (for iPod 1wire) */
-  export const ff = () => netTuneNetworkZone("FF");
-
-  /** REW KEY (CONTINUOUS*) (for iPod 1wire) */
-  export const rew = () => netTuneNetworkZone("REW");
-
-  /** REPEAT KEY(for iPod 1wire) */
-  export const repeat = () => netTuneNetworkZone("REPEAT");
-
-  /** RANDOM KEY(for iPod 1wire) */
-  export const random = () => netTuneNetworkZone("RANDOM");
-
-  /** REPEAT / SHUFFLE KEY */
-  export const repeatShuffle = () => netTuneNetworkZone("REP/SHF");
-
-  /** DISPLAY KEY(for iPod 1wire) */
-  export const display = () => netTuneNetworkZone("DISPLAY");
-
-  /** MEMORY KEY */
-  export const memory = () => netTuneNetworkZone("MEMORY");
-
-  /** RIGHT KEY(for iPod 1wire) */
-  export const right = () => netTuneNetworkZone("RIGHT");
-
-  /** LEFT KEY(for iPod 1wire) */
-  export const left = () => netTuneNetworkZone("LEFT");
-
-  /** UP KEY(for iPod 1wire) */
-  export const up = () => netTuneNetworkZone("UP");
-
-  /** DOWN KEY(for iPod 1wire) */
-  export const down = () => netTuneNetworkZone("DOWN");
-
-  /** SELECT KEY(for iPod 1wire) */
-  export const select = () => netTuneNetworkZone("SELECT");
-
-  /** RETURN KEY(for iPod 1wire) */
-  export const return_ = () => netTuneNetworkZone("RETURN");
-}
-
-/**
- * Internet Radio Preset Command (Network Model Only)
- */
-export function internetRadioPreset(value: string) {
-  return new Packet("NP3", value);
-}
-export namespace internetRadioPreset {
-
+  /** sets Volume Level Up 1dB Step */
+  export const levelUp1dbStep = () => volume("UP1");
 }

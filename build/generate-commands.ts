@@ -168,12 +168,13 @@ function renderCommand(
   }
 
   const lines = Object.keys(command.values)
+    .sort()
     .map(k => renderValue(command.values[k], k, commandKey, funcName, zoneName))
     .filter(l => l);
 
   return `
     /**
-      * ${command.description}
+      * ${command.description} (${commandKey})
       */
     export function ${funcName}(value: string){
       return new Packet("${commandKey}", value);
@@ -193,6 +194,7 @@ function renderCommand(
  */
 function renderZone(name: string, commands: OnkyoDataCommandMap): string {
   const lines = Object.keys(commands)
+    .sort()
     .map(k => renderCommand(commands[k], k, name))
     .filter(l => l);
 
@@ -218,7 +220,7 @@ function getOnkyoData(): Promise<OnkyoData> {
 async function main() {
   const onkyoData = await getOnkyoData();
 
-  const zones = <OnkyoDataZone[]>Object.keys(onkyoData.commands);
+  const zones = <OnkyoDataZone[]>Object.keys(onkyoData.commands).sort();
   const commandsDir = path.join(__dirname, "..", "src", "commands");
   try {
     await mkdir(commandsDir, 0o755);

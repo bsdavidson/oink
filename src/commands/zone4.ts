@@ -1,7 +1,150 @@
 import { Packet } from "../protocol";
 
 /**
- * Zone4 Power Command
+ * Zone4 Muting Command (MT4)
+ */
+export function muting(value: string) {
+  return new Packet("MT4", value);
+}
+export namespace muting {
+  /** sets Zone4 Muting Off */
+  export const off = () => muting("00");
+
+  /** sets Zone4 Muting On */
+  export const on = () => muting("01");
+
+  /** gets the Zone4 Muting Status */
+  export const query = () => muting("QSTN");
+
+  /** sets Zone4 Muting Wrap-Around */
+  export const toggle = () => muting("TG");
+}
+
+/**
+ * Internet Radio Preset Command (Network Model Only) (NP4)
+ */
+export function internetRadioPreset(value: string) {
+  return new Packet("NP4", value);
+}
+export namespace internetRadioPreset {
+
+}
+
+/**
+ * Net-Tune/Network Operation Command(Network Model Only) (NT4)
+ */
+export function netTuneNetworkZone(value: string) {
+  return new Packet("NT4", value);
+}
+export namespace netTuneNetworkZone {
+  /** DISPLAY KEY(for iPod 1wire) */
+  export const display = () => netTuneNetworkZone("DISPLAY");
+
+  /** DOWN KEY(for iPod 1wire) */
+  export const down = () => netTuneNetworkZone("DOWN");
+
+  /** FF KEY (CONTINUOUS*) (for iPod 1wire) */
+  export const ff = () => netTuneNetworkZone("FF");
+
+  /** LEFT KEY(for iPod 1wire) */
+  export const left = () => netTuneNetworkZone("LEFT");
+
+  /** PAUSE KEY */
+  export const pause = () => netTuneNetworkZone("PAUSE");
+
+  /** PLAY KEY */
+  export const play = () => netTuneNetworkZone("PLAY");
+
+  /** RANDOM KEY(for iPod 1wire) */
+  export const random = () => netTuneNetworkZone("RANDOM");
+
+  /** REPEAT KEY(for iPod 1wire) */
+  export const repeat = () => netTuneNetworkZone("REPEAT");
+
+  /** RETURN KEY(for iPod 1wire) */
+  export const return_ = () => netTuneNetworkZone("RETURN");
+
+  /** REW KEY (CONTINUOUS*) (for iPod 1wire) */
+  export const rew = () => netTuneNetworkZone("REW");
+
+  /** RIGHT KEY(for iPod 1wire) */
+  export const right = () => netTuneNetworkZone("RIGHT");
+
+  /** SELECT KEY(for iPod 1wire) */
+  export const select = () => netTuneNetworkZone("SELECT");
+
+  /** STOP KEY */
+  export const stop = () => netTuneNetworkZone("STOP");
+
+  /** TRACK DOWN KEY */
+  export const trdn = () => netTuneNetworkZone("TRDN");
+
+  /** TRACK UP KEY */
+  export const trup = () => netTuneNetworkZone("TRUP");
+
+  /** UP KEY(for iPod 1wire) */
+  export const up = () => netTuneNetworkZone("UP");
+}
+
+/**
+ * Net-Tune/Network Operation Command(Net-Tune Model Only) (NTC)
+ */
+export function netTuneNetwork(value: string) {
+  return new Packet("NTC", value);
+}
+export namespace netTuneNetwork {
+  /** PAUSE KEY */
+  export const pausez = () => netTuneNetwork("PAUSEz");
+
+  /** PLAY KEY */
+  export const playz = () => netTuneNetwork("PLAYz");
+
+  /** STOP KEY */
+  export const stopz = () => netTuneNetwork("STOPz");
+
+  /** TRACK DOWN KEY */
+  export const trdnz = () => netTuneNetwork("TRDNz");
+
+  /** TRACK UP KEY */
+  export const trupz = () => netTuneNetwork("TRUPz");
+}
+
+/**
+ * Preset Command (PR4)
+ */
+export function presetZone(value: string) {
+  return new Packet("PR4", value);
+}
+export namespace presetZone {
+  /** sets Preset No. Wrap-Around Down */
+  export const down = () => presetZone("DOWN");
+
+  /** gets The Preset No. */
+  export const query = () => presetZone("QSTN");
+
+  /** sets Preset No. Wrap-Around Up */
+  export const up = () => presetZone("UP");
+}
+
+/**
+ * Preset Command (PRS)
+ */
+export function preset(value: string) {
+  return new Packet("PRS", value);
+}
+export namespace preset {
+  /** sets Preset No. Wrap-Around Down */
+  export const down = () => preset("DOWN");
+
+  /** gets The Preset No. */
+  export const query = () => preset("QSTN");
+
+  /** sets Preset No. Wrap-Around Up */
+  export const up = () => preset("UP");
+}
+
+/**
+ * Zone4 Power Command (PW4)
  */
 export function power(value: string) {
   return new Packet("PW4", value);
@@ -18,49 +161,42 @@ export namespace power {
 }
 
 /**
- * Zone4 Muting Command
- */
-export function muting(value: string) {
-  return new Packet("MT4", value);
-}
-export namespace muting {
-  /** sets Zone4 Muting Off */
-  export const off = () => muting("00");
-
-  /** sets Zone4 Muting On */
-  export const on = () => muting("01");
-
-  /** sets Zone4 Muting Wrap-Around */
-  export const toggle = () => muting("TG");
-
-  /** gets the Zone4 Muting Status */
-  export const query = () => muting("QSTN");
-}
-
-/**
- * Zone4 Volume Command
- */
-export function volume(value: string) {
-  return new Packet("VL4", value);
-}
-export namespace volume {
-  /** sets Volume Level Up */
-  export const levelUp = () => volume("UP");
-
-  /** sets Volume Level Down */
-  export const levelDown = () => volume("DOWN");
-
-  /** gets the Volume Level */
-  export const query = () => volume("QSTN");
-}
-
-/**
- * ZONE4 Selector Command
+ * ZONE4 Selector Command (SL4)
  */
 export function selector(value: string) {
   return new Packet("SL4", value);
 }
 export namespace selector {
+  /** sets VIDEO1, VCR/DVR, STB/DVR */
+  export const video1 = () => selector("00");
+
+  /** sets VIDEO2, CBL/SAT */
+  export const video2 = () => selector("01");
+
+  /** sets VIDEO3, GAME/TV, GAME, GAME1 */
+  export const video3 = () => selector("02");
+
+  /** sets VIDEO4, AUX1(AUX) */
+  export const video4 = () => selector("03");
+
+  /** sets VIDEO5, AUX2, GAME2 */
+  export const video5 = () => selector("04");
+
+  /** sets VIDEO6, PC */
+  export const video6 = () => selector("05");
+
+  /** sets VIDEO7 */
+  export const video7 = () => selector("06");
+
+  /** sets Hidden1, EXTRA1 */
+  export const hidden1 = () => selector("07");
+
+  /** sets Hidden2, EXTRA2 */
+  export const hidden2 = () => selector("08");
+
+  /** sets Hidden3, EXTRA3 */
+  export const hidden3 = () => selector("09");
+
   /** sets DVD, BD/DVD */
   export const dvd = () => selector("10");
 
@@ -94,6 +230,21 @@ export namespace selector {
   /** sets USB/USB(Front) */
   export const usbFront = () => selector("29");
 
+  /** sets USB(Rear) */
+  export const usbRear = () => selector("2A");
+
+  /** sets NETWORK, NET */
+  export const network = () => selector("2B");
+
+  /** sets USB(toggle) */
+  export const usbToggle = () => selector("2C");
+
+  /** sets Airplay */
+  export const airplay = () => selector("2D");
+
+  /** sets Bluetooth */
+  export const bluetooth = () => selector("2E");
+
   /** sets MULTI CH */
   export const multiCh = () => selector("30");
 
@@ -112,80 +263,18 @@ export namespace selector {
   /** sets SOURCE */
   export const source = () => selector("80");
 
-  /** sets VIDEO1, VCR/DVR, STB/DVR */
-  export const video1 = () => selector("00");
-
-  /** sets VIDEO2, CBL/SAT */
-  export const video2 = () => selector("01");
-
-  /** sets VIDEO3, GAME/TV, GAME, GAME1 */
-  export const video3 = () => selector("02");
-
-  /** sets VIDEO4, AUX1(AUX) */
-  export const video4 = () => selector("03");
-
-  /** sets VIDEO5, AUX2, GAME2 */
-  export const video5 = () => selector("04");
-
-  /** sets VIDEO6, PC */
-  export const video6 = () => selector("05");
-
-  /** sets VIDEO7 */
-  export const video7 = () => selector("06");
-
-  /** sets Hidden1, EXTRA1 */
-  export const hidden1 = () => selector("07");
-
-  /** sets Hidden2, EXTRA2 */
-  export const hidden2 = () => selector("08");
-
-  /** sets Hidden3, EXTRA3 */
-  export const hidden3 = () => selector("09");
-
-  /** sets USB(Rear) */
-  export const usbRear = () => selector("2A");
-
-  /** sets NETWORK, NET */
-  export const network = () => selector("2B");
-
-  /** sets USB(toggle) */
-  export const usbToggle = () => selector("2C");
-
-  /** sets Airplay */
-  export const airplay = () => selector("2D");
-
-  /** sets Bluetooth */
-  export const bluetooth = () => selector("2E");
-
-  /** sets Selector Position Wrap-Around Up */
-  export const up = () => selector("UP");
-
   /** sets Selector Position Wrap-Around Down */
   export const down = () => selector("DOWN");
 
   /** gets The Selector Position */
   export const query = () => selector("QSTN");
+
+  /** sets Selector Position Wrap-Around Up */
+  export const up = () => selector("UP");
 }
 
 /**
- * Tuning Command
- */
-export function tuning(value: string) {
-  return new Packet("TUN", value);
-}
-export namespace tuning {
-  /** sets Tuning Frequency Wrap-Around Up */
-  export const up = () => tuning("UP");
-
-  /** sets Tuning Frequency Wrap-Around Down */
-  export const down = () => tuning("DOWN");
-
-  /** gets The Tuning Frequency */
-  export const query = () => tuning("QSTN");
-}
-
-/**
- * Tuning Command
+ * Tuning Command (TU4)
  */
 export function tuningZone(value: string) {
   return new Packet("TU4", value);
@@ -224,135 +313,46 @@ export namespace tuningZone {
   /** starts/restarts Direct Tuning Mode */
   export const direct = () => tuningZone("DIRECT");
 
-  /** sets Tuning Frequency Wrap-Around Up */
-  export const up = () => tuningZone("UP");
-
   /** sets Tuning Frequency Wrap-Around Down */
   export const down = () => tuningZone("DOWN");
 
   /** gets The Tuning Frequency */
   export const query = () => tuningZone("QSTN");
+
+  /** sets Tuning Frequency Wrap-Around Up */
+  export const up = () => tuningZone("UP");
 }
 
 /**
- * Preset Command
+ * Tuning Command (TUN)
  */
-export function preset(value: string) {
-  return new Packet("PRS", value);
+export function tuning(value: string) {
+  return new Packet("TUN", value);
 }
-export namespace preset {
-  /** sets Preset No. Wrap-Around Up */
-  export const up = () => preset("UP");
+export namespace tuning {
+  /** sets Tuning Frequency Wrap-Around Down */
+  export const down = () => tuning("DOWN");
 
-  /** sets Preset No. Wrap-Around Down */
-  export const down = () => preset("DOWN");
+  /** gets The Tuning Frequency */
+  export const query = () => tuning("QSTN");
 
-  /** gets The Preset No. */
-  export const query = () => preset("QSTN");
+  /** sets Tuning Frequency Wrap-Around Up */
+  export const up = () => tuning("UP");
 }
 
 /**
- * Preset Command
+ * Zone4 Volume Command (VL4)
  */
-export function presetZone(value: string) {
-  return new Packet("PR4", value);
+export function volume(value: string) {
+  return new Packet("VL4", value);
 }
-export namespace presetZone {
-  /** sets Preset No. Wrap-Around Up */
-  export const up = () => presetZone("UP");
+export namespace volume {
+  /** sets Volume Level Down */
+  export const levelDown = () => volume("DOWN");
 
-  /** sets Preset No. Wrap-Around Down */
-  export const down = () => presetZone("DOWN");
+  /** gets the Volume Level */
+  export const query = () => volume("QSTN");
 
-  /** gets The Preset No. */
-  export const query = () => presetZone("QSTN");
-}
-
-/**
- * Net-Tune/Network Operation Command(Net-Tune Model Only)
- */
-export function netTuneNetwork(value: string) {
-  return new Packet("NTC", value);
-}
-export namespace netTuneNetwork {
-  /** PLAY KEY */
-  export const playz = () => netTuneNetwork("PLAYz");
-
-  /** STOP KEY */
-  export const stopz = () => netTuneNetwork("STOPz");
-
-  /** PAUSE KEY */
-  export const pausez = () => netTuneNetwork("PAUSEz");
-
-  /** TRACK UP KEY */
-  export const trupz = () => netTuneNetwork("TRUPz");
-
-  /** TRACK DOWN KEY */
-  export const trdnz = () => netTuneNetwork("TRDNz");
-}
-
-/**
- * Net-Tune/Network Operation Command(Network Model Only)
- */
-export function netTuneNetworkZone(value: string) {
-  return new Packet("NT4", value);
-}
-export namespace netTuneNetworkZone {
-  /** PLAY KEY */
-  export const play = () => netTuneNetworkZone("PLAY");
-
-  /** STOP KEY */
-  export const stop = () => netTuneNetworkZone("STOP");
-
-  /** PAUSE KEY */
-  export const pause = () => netTuneNetworkZone("PAUSE");
-
-  /** TRACK UP KEY */
-  export const trup = () => netTuneNetworkZone("TRUP");
-
-  /** TRACK DOWN KEY */
-  export const trdn = () => netTuneNetworkZone("TRDN");
-
-  /** FF KEY (CONTINUOUS*) (for iPod 1wire) */
-  export const ff = () => netTuneNetworkZone("FF");
-
-  /** REW KEY (CONTINUOUS*) (for iPod 1wire) */
-  export const rew = () => netTuneNetworkZone("REW");
-
-  /** REPEAT KEY(for iPod 1wire) */
-  export const repeat = () => netTuneNetworkZone("REPEAT");
-
-  /** RANDOM KEY(for iPod 1wire) */
-  export const random = () => netTuneNetworkZone("RANDOM");
-
-  /** DISPLAY KEY(for iPod 1wire) */
-  export const display = () => netTuneNetworkZone("DISPLAY");
-
-  /** RIGHT KEY(for iPod 1wire) */
-  export const right = () => netTuneNetworkZone("RIGHT");
-
-  /** LEFT KEY(for iPod 1wire) */
-  export const left = () => netTuneNetworkZone("LEFT");
-
-  /** UP KEY(for iPod 1wire) */
-  export const up = () => netTuneNetworkZone("UP");
-
-  /** DOWN KEY(for iPod 1wire) */
-  export const down = () => netTuneNetworkZone("DOWN");
-
-  /** SELECT KEY(for iPod 1wire) */
-  export const select = () => netTuneNetworkZone("SELECT");
-
-  /** RETURN KEY(for iPod 1wire) */
-  export const return_ = () => netTuneNetworkZone("RETURN");
-}
-
-/**
- * Internet Radio Preset Command (Network Model Only)
- */
-export function internetRadioPreset(value: string) {
-  return new Packet("NP4", value);
-}
-export namespace internetRadioPreset {
-
+  /** sets Volume Level Up */
+  export const levelUp = () => volume("UP");
 }
