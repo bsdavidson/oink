@@ -643,11 +643,11 @@ main:
         description: sets Selector + Listening Mode Display Mode@1line
         models: set1
       '02':
-        name: '02'
+        name: digital-format
         description: Display Digital Format(temporary display)
         models: set1
       '03':
-        name: '03'
+        name: video-format
         description: Display Video Format(temporary display)
         models: set1
       TG:
@@ -683,7 +683,7 @@ main:
         description: sets Dimmer Level "Bright & LED OFF"
         models: set1
       DIM:
-        name: dim
+        name: cycle
         description: sets Dimmer Level Wrap-Around Up
         models: set1
       QSTN:
@@ -859,15 +859,15 @@ main:
         description: sets VIDEO7
         models: set1
       '07':
-        name: '07'
+        name: extra1
         description: Hidden1     EXTRA1
         models: set1
       08:
-        name: 08
+        name: extra2
         description: Hidden2     EXTRA2
         models: set1
       09:
-        name: 09
+        name: extra3
         description: Hidden3     EXTRA3
         models: set1
       '10':
@@ -919,11 +919,11 @@ main:
         description: sets INTERNET RADIO, iRadio Favorite
         models: set1
       '29':
-        name: [usb, usb]
+        name: usb-front
         description: sets USB/USB(Front)
         models: set1
       2A:
-        name: usb
+        name: usb-rear
         description: sets USB(Rear)
         models: set1
       2B:
@@ -931,12 +931,12 @@ main:
         description: sets NETWORK, NET
         models: set1
       2C:
-        name: usb
+        name: usb-toggle
         description: sets USB(toggle)
         models: set1
       2D:
-        name: aiplay
-        description: sets Aiplay
+        name: airplay
+        description: sets Airplay
         models: set1
       2E:
         name: bluetooth
@@ -1195,27 +1195,27 @@ main:
     description: HDMI Output Selector
     values:
       '00':
-        name: ['no', analog]
+        name: analog
         description: sets No, Analog
         models: set1
       '01':
-        name: ['yes', out]
+        name: hdmi-main
         description: sets Yes/Out Main, HDMI Main, HDMI
         models: set1
       '02':
-        name: [out-sub, sub, hdbaset]
+        name: hdmi-sub
         description: sets Out Sub, HDMI Sub, HDBaseT
         models: set1
       '03':
-        name: [both, sub]
+        name: both-main-and-sub
         description: sets, Both, Main+Sub
         models: set1
       '04':
-        name: [both]
+        name: both-main
         description: sets, Both(Main)
         models: set1
       '05':
-        name: [both]
+        name: both-sub
         description: sets, Both(Sub)
         models: set1
       UP:
@@ -1227,7 +1227,7 @@ main:
         description: gets The HDMI Out Selector
         models: set1
   HAO:
-    name: hdmi-audio-out
+    name: hdmi-audio-out-main
     description: HDMI Audio Out (Main)
     values:
       '00':
@@ -1251,7 +1251,7 @@ main:
         description: gets HDMI Audio Out
         models: set1
   HAS:
-    name: hdmi-audio-out
+    name: hdmi-audio-out-sub
     description: HDMI Audio Out (Sub)
     values:
       '00':
@@ -1295,6 +1295,7 @@ main:
     description: HDMI CEC Control Monitor
     values:
       '01':
+        name: main
         description: sets Main
         models: set1
       '02':
@@ -1346,7 +1347,7 @@ main:
         description: sets 1080p(HDMI Output Only)
         models: set1
       '07':
-        name: [1080p, 24fs]
+        name: 1080p-24fs
         description: sets 1080p/24fs(HDMI Output Only)
         models: set1
       '15':
@@ -1354,8 +1355,8 @@ main:
         description: sets 2560x1080p
         models: set1
       08:
-        name: 4k-upcaling
-        description: sets 4K Upcaling(HDMI Output Only) 4K(HDMI Output Only)
+        name: 4k-upscaling
+        description: sets 4K Upscaling(HDMI Output Only) 4K(HDMI Output Only)
         models: set1
       '06':
         name: source
@@ -1450,7 +1451,7 @@ main:
         description: sets Zoom
         models: set1
       '04':
-        name: zoom
+        name: wide-zoom
         description: sets Wide Zoom
         models: set1
       '05':
@@ -1526,7 +1527,7 @@ main:
         description: sets SURROUND
         models: set1
       '03':
-        name: [film, game-rpg]
+        name: film
         description: sets FILM, Game-RPG
         models: set1
       '04':
@@ -1534,11 +1535,11 @@ main:
         description: sets THX
         models: set1
       '05':
-        name: [action, game-action]
+        name: action
         description: sets ACTION, Game-Action
         models: set1
       '06':
-        name: [musical, game-rock]
+        name: musical
         description: sets MUSICAL, Game-Rock
         models: set1
       '07':
@@ -1606,19 +1607,19 @@ main:
         description: sets Whole House Mode
         models: set1
       '23':
-        name: stage
+        name: stage-japan
         description: sets Stage (when Genre Control is Enable in Japan Model)
         models: set1
       '25':
-        name: action
+        name: action-japan
         description: sets Action (when Genre Control is Enable in Japan Model)
         models: set1
       '26':
-        name: music
+        name: music-japan
         description: sets Music (when Genre Contorl is Enable in Japan Model)
         models: set1
       2E:
-        name: sports
+        name: sports-japan
         description: sets Sports (when Genre Control is Enable in Japan Model)
         models: set1
       '40':
@@ -1646,23 +1647,23 @@ main:
         description: sets THX Games
         models: set1
       '50':
-        name: [thx-u2, s2, i, s-cinema, cinema2]
+        name: [thx-ultra2-cinema, thx-u2, s2, i, s-cinema, cinema2]
         description: sets THX U2/S2/I/S Cinema/Cinema2
         models: set1
       '51':
-        name: [thx-musicmode, thx-u2, s2, i, s-music]
+        name: [thx-ultra2-music, thx-musicmode, thx-u2, s2, i, s-music]
         description: sets THX MusicMode,THX U2/S2/I/S Music
         models: set1
       '52':
-        name: [thx-games, thx-u2, s2, i, s-games]
+        name: [thx-ultra2-games, thx-games, thx-u2, s2, i, s-games]
         description: sets THX Games Mode,THX U2/S2/I/S Games
         models: set1
       '80':
-        name: [plii, pliix-movie, dolby-atmos, dolby-surround]
+        name: [plii-movie, plii, pliix-movie, dolby-atmos, dolby-surround]
         description: sets PLII/PLIIx Movie, Dolby Atmos/Dolby Surround
         models: set1
       '81':
-        name: [plii, pliix-music]
+        name: [plii-music, plii]
         description: sets PLII/PLIIx Music
         models: set1
       '82':
@@ -1674,15 +1675,15 @@ main:
         description: sets Neo:6 Music/Neo:X Music
         models: set1
       '84':
-        name: [plii, pliix-thx-cinema, dolby-surround-thx-cinema]
+        name: [plii-thx-cinema, plii, pliix-thx-cinema, dolby-surround-thx-cinema]
         description: sets PLII/PLIIx THX Cinema, Dolby Surround THX Cinema
         models: set1
       '85':
-        name: [neo-6, neo-x-thx-cinema, dts-neural-x-thx-cinema]
+        name: [neo-6-thx-cinema, neo-6, neo-x-thx-cinema, dts-neural-x-thx-cinema]
         description: sets Neo:6/Neo:X THX Cinema, DTS Neural:X THX Cinema
         models: set1
       '86':
-        name: [plii, pliix-game]
+        name: [plii-game, plii, pliix-game]
         description: sets PLII/PLIIx Game
         models: set1
       '87':
@@ -1694,19 +1695,19 @@ main:
         description: sets Neural THX/Neural Surround
         models: set1
       '89':
-        name: [plii, pliix-thx-games, dolby-surround-thx-games]
+        name: [plii-thx-games, plii, pliix-thx-games, dolby-surround-thx-games]
         description: sets PLII/PLIIx THX Games, Dolby Surround THX Games
         models: set1
       8A:
-        name: [neo-6, neo-x-thx-games, dts-neural-x-thx-games]
+        name: [neo-6-thx-games, neo-6, neo-x-thx-games, dts-neural-x-thx-games]
         description: sets Neo:6/Neo:X THX Games, DTS Neural:X THX Games
         models: set1
       8B:
-        name: [plii, pliix-thx-music, dolby-surround-thx-music]
+        name: [plii-thx-music, plii, pliix-thx-music, dolby-surround-thx-music]
         description: sets PLII/PLIIx THX Music, Dolby Surround THX Music
         models: set1
       8C:
-        name: [neo-6, neo-x-thx-music, dts-neural-x-thx-music]
+        name: [neo-6-thx-music, neo-6, neo-x-thx-music, dts-neural-x-thx-music]
         description: sets Neo:6/Neo:X THX Music, DTS Neural:X THX Music
         models: set1
       8D:
@@ -1750,15 +1751,15 @@ main:
         description: sets PLIIz Height + THX Games
         models: set1
       '97':
-        name: [pliiz-height-thx-u2, s2-cinema]
+        name: [pliiz-height-thx-u2-cinema, pliiz-height-thx-u2, s2-cinema]
         description: sets PLIIz Height + THX U2/S2 Cinema
         models: set1
       '98':
-        name: [pliiz-height-thx-u2, s2-music]
+        name: [pliiz-height-thx-u2-music, pliiz-height-thx-u2, s2-music]
         description: sets PLIIz Height + THX U2/S2 Music
         models: set1
       '99':
-        name: [pliiz-height-thx-u2, s2-games]
+        name: [pliiz-height-thx-u2-games, pliiz-height-thx-u2, s2-games]
         description: sets PLIIz Height + THX U2/S2 Games
         models: set1
       9A:
@@ -1766,15 +1767,15 @@ main:
         description: sets Neo:X Game
         models: set1
       A0:
-        name: [pliix, plii-movie-audyssey-dsx]
+        name: [pliix-movie-audyssey-dsx, plii-movie-audyssey-dsx]
         description: sets PLIIx/PLII Movie + Audyssey DSX
         models: set1
       A1:
-        name: [pliix, plii-music-audyssey-dsx]
+        name: [pliix-music-audyssey-dsx, plii-music-audyssey-dsx]
         description: sets PLIIx/PLII Music + Audyssey DSX
         models: set1
       A2:
-        name: [pliix, plii-game-audyssey-dsx]
+        name: [pliix-game-audyssey-dsx, plii-game-audyssey-dsx]
         description: sets PLIIx/PLII Game + Audyssey DSX
         models: set1
       A3:
@@ -1802,39 +1803,39 @@ main:
         description: sets Auto Surround
         models: set1
       UP:
-        name: up
+        name: cycle-up
         description: sets Listening Mode Wrap-Around Up
         models: set1
       DOWN:
-        name: down
+        name: cycle-down
         description: sets Listening Mode Wrap-Around Down
         models: set1
       MOVIE:
-        name: movie
+        name: cycle-movie
         description: sets Listening Mode Wrap-Around Up
         models: set1
       MUSIC:
-        name: music
+        name: cycle-music
         description: sets Listening Mode Wrap-Around Up
         models: set1
       GAME:
-        name: game
+        name: cycle-game
         description: sets Listening Mode Wrap-Around Up
         models: set1
       THX:
-        name: thx
+        name: cycle-thx
         description: sets Listening Mode Wrap-Around Up
         models: set1
       AUTO:
-        name: auto
+        name: cycle-auto
         description: sets Listening Mode Wrap-Around Up
         models: set1
       SURR:
-        name: surr
+        name: cycle-surround
         description: sets Listening Mode Wrap-Around Up
         models: set1
       STEREO:
-        name: stereo
+        name: cycle-stereo
         description: sets Listening Mode Wrap-Around Up
         models: set1
       QSTN:
@@ -1998,11 +1999,11 @@ main:
         description: sets AccuEQ Off
         models: set1
       '01':
-        name: ['on', 'on']
+        name: 'on'
         description: sets AccuEQ On, On(All Ch)
         models: set1
       '02':
-        name: ['on']
+        name: 'on-front'
         description: sets AccuEQ, On(ex. Front L/R)
         models: set1
       UP:
@@ -2215,13 +2216,13 @@ main:
     description: Fullband MCACC Calibration
     values:
       '00':
-        name: '00'
+        name: incomplete
         description: 'not complete Fullband MCACC calibration or
 
           not have Fullband MCACC function'
         models: set1
       '01':
-        name: '01'
+        name: complete
         description: complete Fullband MCACC calibration
         models: set1
       QSTN:
@@ -2593,18 +2594,19 @@ main:
     description: Input Channel (Multiplex) / Dual Mono
     values:
       '00':
+        name: mono-main
         description: sets DUAL MONO MAIN
         models: set1
       '01':
-        name: sub
+        name: mono-sub
         description: sets DUAL MONO SUB
         models: set1
       '02':
-        name: sub
+        name: mono-main-and-sub
         description: sets DUAL MONO MAIN+SUB
         models: set1
       UP:
-        name: up
+        name: cycle
         description: sets Panorama Wrap-Around
         models: set1
       QSTN:
@@ -2894,11 +2896,11 @@ main:
           yy=ErrorCode2'
         models: set1
       '00':
-        name: '00'
+        name: not-exists
         description: not exist new firmware
         models: set1
       '01':
-        name: '01'
+        name: exists
         description: exist new firmware
         models: set1
       QSTN:
@@ -3580,11 +3582,11 @@ zone2:
         description: sets INTERNET RADIO, iRadio Favorite
         models: set3
       '29':
-        name: [usb, usb]
+        name: usb-front
         description: sets USB/USB(Front)
         models: set3
       2A:
-        name: usb
+        name: usb-rear
         description: sets USB(Rear)
         models: set3
       2B:
@@ -3592,7 +3594,7 @@ zone2:
         description: sets NETWORK, NET
         models: set3
       2C:
-        name: usb
+        name: usb-toggle
         description: sets USB(toggle)
         models: set3
       2D:
@@ -3676,7 +3678,7 @@ zone2:
         description: gets The Tuning Frequency
         models: set3
   TUZ:
-    name: tuning
+    name: tuning-zone
     description: Tuning Command
     values:
       nnnnn:
@@ -3770,7 +3772,7 @@ zone2:
         description: gets The Preset No.
         models: set3
   PRZ:
-    name: preset
+    name: preset-zone
     description: Preset Command
     values:
       ? - 1
@@ -3820,7 +3822,7 @@ zone2:
         description: TRACK DOWN KEY
         models: set3
   NTZ:
-    name: net-tune-network
+    name: net-tune-network-zone
     description: Net-Tune/Network Operation Command(Network Model Only)
     values:
       PLAY:
@@ -3941,11 +3943,11 @@ zone2:
         description: sets MULTIPLEX
         models: set3
       '87':
-        name: dvs
+        name: dvs-pl2
         description: sets DVS(Pl2)
         models: set3
       '88':
-        name: dvs
+        name: dvs-neo6
         description: sets DVS(NEO6)
         models: set3
   LTZ:
@@ -3981,11 +3983,11 @@ zone2:
         description: sets Both Off
         models: set3
       '01':
-        name: 'on'
+        name: 're-eq-on'
         description: sets Re-EQ On
         models: set3
       '02':
-        name: 'on'
+        name: 'academy-on'
         description: sets Academy On
         models: set3
       UP:
@@ -4214,11 +4216,11 @@ zone3:
         description: sets INTERNET RADIO, iRadio Favorite
         models: set4
       '29':
-        name: [usb, usb]
+        name: usb-front
         description: sets USB/USB(Front)
         models: set4
       2A:
-        name: usb
+        name: usb-rear
         description: sets USB(Rear)
         models: set4
       2B:
@@ -4226,7 +4228,7 @@ zone3:
         description: sets NETWORK, NET
         models: set4
       2C:
-        name: usb
+        name: usb-toggle
         description: sets USB(toggle)
         models: set4
       2D:
@@ -4293,7 +4295,7 @@ zone3:
         description: gets The Tuning Frequency
         models: set4
   TU3:
-    name: tuning
+    name: tuning-zone
     description: Tuning Command
     values:
       nnnnn:
@@ -4387,7 +4389,7 @@ zone3:
         description: gets The Preset No.
         models: set4
   PR3:
-    name: preset
+    name: preset-zone
     description: Preset Command
     values:
       ? - 1
@@ -4437,7 +4439,7 @@ zone3:
         description: TRACK DOWN KEY
         models: set4
   NT3:
-    name: net-tune-network
+    name: net-tune-network-zone
     description: Net-Tune/Network Operation Command(Network Model Only)
     values:
       PLAY:
@@ -4679,11 +4681,11 @@ zone4:
         description: sets INTERNET RADIO, iRadio Favorite
         models: set6
       '29':
-        name: [usb, usb]
+        name: usb-front
         description: sets USB/USB(Front)
         models: set6
       2A:
-        name: usb
+        name: usb-rear
         description: sets USB(Rear)
         models: set6
       2B:
@@ -4691,7 +4693,7 @@ zone4:
         description: sets NETWORK, NET
         models: set6
       2C:
-        name: usb
+        name: usb-toggle
         description: sets USB(toggle)
         models: set6
       2D:
@@ -4758,7 +4760,7 @@ zone4:
         description: gets The Tuning Frequency
         models: set6
   TU4:
-    name: tuning
+    name: tuning-zone
     description: Tuning Command
     values:
       nnnnn:
@@ -4847,7 +4849,7 @@ zone4:
         description: gets The Preset No.
         models: set6
   PR4:
-    name: preset
+    name: preset-zone
     description: Preset Command
     values:
       ? - 1
@@ -4897,7 +4899,7 @@ zone4:
         description: TRACK DOWN KEY
         models: set6
   NT4:
-    name: net-tune-network
+    name: net-tune-network-zone
     description: Net-Tune/Network Operation Command(Network Model Only)
     values:
       PLAY:
@@ -5372,7 +5374,7 @@ dock:
           \ digits] )"
         models: set1
   NLA:
-    name: net-usb-list-info
+    name: net-usb-list-info-all
     description: NET/USB List Info(All item, need processing XML data, for Network
       Control Only)
     values:
@@ -5648,7 +5650,7 @@ dock:
           \ and [LF] are removed )"
         models: set1
   NLU:
-    name: net-usb-list-info
+    name: net-usb-list-info-update
     description: NET/USB List Info (Update item, need processing XML data, for Network
       Control Only)
     values:
