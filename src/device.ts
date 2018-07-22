@@ -82,12 +82,15 @@ export class Device extends EventEmitter {
     return this.connectPromise;
   }
 
-  send(command: string, parameter: string, deviceType: string): void {
+  send(command: string, parameter: string): void;
+  send(command: Packet): void;
+  send(command: string | Packet, parameter: string = ""): void {
     if (!this.socket) {
       throw new Error("device not connected");
     }
-
-    const buf = new Packet(command, parameter, deviceType).toBuffer();
+    const packet =
+      typeof command === "string" ? new Packet(command, parameter) : command;
+    const buf = packet.toBuffer(this.type);
     if (buf) {
       this.socket.write(buf);
     }

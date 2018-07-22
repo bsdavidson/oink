@@ -21,8 +21,8 @@ export class Packet {
   /**
    * Creates a new Buffer from the Packet to be sent to the device.
    */
-  toBuffer() {
-    const data = `!${this.deviceType}${this.command}${this.parameter}\r`;
+  toBuffer(deviceType: string = this.deviceType) {
+    const data = `!${deviceType}${this.command}${this.parameter}\r`;
     const buf = Buffer.alloc(HEADER_SIZE + data.length);
     buf.write(MAGIC, 0, 4, "ascii");
     buf.writeUInt32BE(HEADER_SIZE, 4);
