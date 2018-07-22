@@ -468,19 +468,19 @@ main:
     name: sleep-set
     description: Sleep Set Command
     values:
-      "\u201C01\u201D-\u201C5A\u201D":
+      "01-5A":
         name: time-1-90min
         description: sets Sleep Time 1 - 90min ( In hexadecimal representation)
         models: set1
-      "\u201COFF\u201D":
+      "OFF":
         name: time-off
         description: sets Sleep Time Off
         models: set1
-      "\u201CUP\u201D":
+      "UP":
         name: up
         description: sets Sleep Time Wrap-Around UP
         models: set1
-      "\u201CQSTN\u201D":
+      "QSTN":
         name: qstn
         description: gets The Sleep Time
         models: set1
@@ -488,7 +488,7 @@ main:
     name: speaker-level-calibration
     description: Speaker Level Calibration Command
     values:
-      "\u201CTEST\u201D":
+      "TEST":
         name: test
         description: TEST Key
         models: set1
@@ -496,15 +496,15 @@ main:
         name: test-tone-off
         description: sets TEST TONE OFF
         models: set1
-      "\u201CCHSEL\u201D":
+      "CHSEL":
         name: chsel
         description: CH SEL Key
         models: set1
-      "\u201CUP\u201D":
+      "UP":
         name: up
         description: LEVEL + Key
         models: set1
-      "\u201CDOWN\u201D":
+      "DOWN":
         name: down
         description: "LEVEL \u2013 KEY"
         models: set1
@@ -522,11 +522,11 @@ main:
       : name: 15db-0db-12db
         description: sets Subwoofer Level -15dB - 0dB - +12dB
         models: set1
-      "\u201CUP\u201D":
+      "UP":
         name: up
         description: LEVEL + Key
         models: set1
-      "\u201CDOWN\u201D":
+      "DOWN":
         name: down
         description: "LEVEL \u2013 KEY"
         models: set1
@@ -548,11 +548,11 @@ main:
       : name: 15db-0db-12db
         description: sets Subwoofer 2 Level -15dB - 0dB - +12dB
         models: set1
-      "\u201CUP\u201D":
+      "UP":
         name: up
         description: LEVEL + Key
         models: set1
-      "\u201CDOWN\u201D":
+      "DOWN":
         name: down
         description: "LEVEL \u2013 KEY"
         models: set1
@@ -574,11 +574,11 @@ main:
       : name: 12db-0db-12db
         description: sets Center Level -12dB - 0dB - +12dB
         models: set1
-      "\u201CUP\u201D":
+      "UP":
         name: up
         description: LEVEL + Key
         models: set1
-      "\u201CDOWN\u201D":
+      "DOWN":
         name: down
         description: "LEVEL \u2013 KEY"
         models: set1
@@ -906,7 +906,7 @@ main:
         name: am
         description: sets AM
         models: set1
-      "\u201C26\u201D":
+      "26":
         name: tuner
         description: sets TUNER
         models: set1
@@ -3038,19 +3038,19 @@ main:
     name: rds-information
     description: RDS Information Command (RDS Model Only)
     values:
-      "\u201C00\u201D":
-        name: '00'
+      "00":
+        name: rt
         description: Display RT Information
         models: set1
-      "\u201C01\u201D":
-        name: '01'
+      "01":
+        name: pty
         description: Display PTY Information
         models: set1
-      "\u201C02\u201D":
-        name: '02'
+      "02":
+        name: tp
         description: Display TP Information
         models: set1
-      "\u201CUP\u201D":
+      "UP":
         name: up
         description: Display RDS Information Wrap-Around Change
         models: set1
@@ -3058,11 +3058,11 @@ main:
     name: pty-scan
     description: PTY Scan Command (RDS Model Only)
     values:
-      "\u201C01\u201D-\u201C1D\u201D":
+      "01-1D":
         name: no-1-29
-        description: "sets PTY No \u201C1 - 29\u201D ( In hexadecimal representation)"
+        description: "sets PTY No 1 - 29 ( In hexadecimal representation)"
         models: set1
-      "\u201CENTER\u201D":
+      "ENTER":
         name: enter
         description: Finish PTY Scan
         models: set1
@@ -3070,11 +3070,12 @@ main:
     name: tp-scan
     description: TP Scan Command (RDS Model Only)
     values:
-      "\u201C\u201D":
-        description: "Start TP Scan (When Don\u2019t Have Parameter)"
+      "":
+        name: start
+        description: "Start TP Scan (When Don't Have Parameter)"
         models: set1
-      "\u201CENTER\u201D":
-        name: enter
+      "ENTER":
+        name: stop
         description: Finish TP Scan
         models: set1
   XCN:
@@ -3116,7 +3117,7 @@ main:
     values:
       ? - 0
         - 597
-      : description: "XM Channel Number  \u201C000 - 255\u201D"
+      : description: "XM Channel Number  000 - 255"
         models: set1
       UP:
         name: up
@@ -3188,7 +3189,7 @@ main:
     values:
       ? - 0
         - 597
-      : description: "SIRIUS Channel Number  \u201C000 - 255\u201D"
+      : description: "SIRIUS Channel Number  000 - 255"
         models: set1
       UP:
         name: up
