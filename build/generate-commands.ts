@@ -36,8 +36,16 @@ const renames: {[s: string]: string} = {
   "rep-shf": "repeatShuffle"
 };
 
+/**
+ * Converts a name from the YAML file (e.g. system-power) to a valid JavaScript
+ * identifier (e.g. systemPower). If the name is defined in the renames map,
+ * the value there will be used instead of generating one.
+ *
+ * @param name A name defined in the YAML file for a command or value. If an
+ *    array of names is passed, only the first name will be used.
+ */
 function toIdentifier(name: string | string[]) {
-  if (name instanceof Array) {
+  if (Array.isArray(name)) {
     name = name[0];
   }
   if (renames[name]) {
@@ -46,20 +54,36 @@ function toIdentifier(name: string | string[]) {
   return name.replace(/-./g, match => match.charAt(1).toUpperCase());
 }
 
-type OnkyoDataCommandMap = {
-  [command: string]: {
-    name: string;
-    description: string;
-    values: {
-      [value: string]: {
-        name: string;
-        description: string;
-        models: string;
-      };
-    };
+/**
+ * Describes an individual parameter value for a command in the YAML file.
+ */
+type OnkyoDataCommandValue = {
+  name: string;
+  description: string;
+  models: string;
+};
+
+/**
+ * Describes a command in the YAML file.
+ */
+type OnkyoDataCommand = {
+  name: string;
+  description: string;
+  values: {
+    [value: string]: OnkyoDataCommandValue;
   };
 };
 
+/**
+ * A dictionary of commands and their possible values.
+ */
+type OnkyoDataCommandMap = {
+  [command: string]: OnkyoDataCommand;
+};
+
+/**
+ * The possible values for zones in the YAML file.
+ */
 enum OnkyoDataZone {
   Main = "main",
   Zone2 = "zone2",
@@ -68,65 +92,117 @@ enum OnkyoDataZone {
   Dock = "dock"
 }
 
+/**
+ * Represents the top level data loaded from the YAML file.
+ */
 interface OnkyoData {
   commands: {[zone in OnkyoDataZone]: OnkyoDataCommandMap};
   modelsets: any;
-  // command_mappings: any;
-  // vault_mappings: any;
 }
 
-function renderCommands(name: string, zoneCommands: OnkyoDataCommandMap) {
-  const lines = Object.keys(zoneCommands).map(ck => {
-    const command = zoneCommands[ck];
-    const commandFuncName = toIdentifier(command.name);
-    if (!commandFuncName.match(/^[a-z][a-z0-9]*$/i)) {
-      console.log(`bad command name ${command.name} (${name} ${ck})`);
-      return;
-    }
+/**
+ * Generates a string of JavaScript code defining a function for this value.
+ * The function, when called, will return a Packet object for this value.
+ *
+ * @param value The value to render.
+ * @param valueKey The key in the map of values. This is also the string
+ *    that is sent to the device as a command parameter. ex "00", "QSTN", ...
+ * @param commandKey The key in the map of commands. This is also the string
+ *    that is sent to the device as a command. ex "PWR", "AMT", ...
+ * @param commandFuncName The name of the generated function for the command.
+ *    ex. systemPower, audioMuting, ...
+ * @param zoneName The name of the zone the command belongs to.
+ *    ex "main", "zone2", ...
+ * @returns Returns a string of code or undefined if code cannot be generated
+ *    for this value.
+ */
+function renderValue(
+  value: OnkyoDataCommandValue,
+  valueKey: string,
+  commandKey: string,
+  commandFuncName: string,
+  zoneName: string
+): string | undefined {
+  if (valueKey.match(/[^a-z0-9/]/i)) {
+    console.log(`bad value key (${zoneName} ${commandKey} ${valueKey})`);
+    return;
+  } else if (!value.name) {
+    console.log(`missing value name (${zoneName} ${commandKey} ${valueKey})`);
+    return;
+  }
+  const valueFuncName = toIdentifier(value.name);
+  if (!valueFuncName.match(/^[a-z][a-z0-9]*_?$/i)) {
+    console.log(
+      `bad value name ${value.name} (${zoneName} ${commandKey} ${valueKey})`
+    );
+    return;
+  }
 
-    const lines = Object.keys(command.values).map(vk => {
-      if (vk.match(/[^a-z0-9/]/i)) {
-        console.log(`bad value key (${name} ${ck} ${vk})`);
-        return;
-      }
+  return `
+    /** ${value.description} */
+    export const ${valueFuncName} = () => ${commandFuncName}("${valueKey}");
+  `;
+}
 
-      const value = command.values[vk];
-      if (!value.name) {
-        console.log(`missing value name (${name} ${ck} ${vk})`);
-        return;
-      }
+/**
+ * Generates a string of JavaScript code defining a function for this command.
+ * The function, when called, creates a Packet to be sent to a device.
+ *
+ * @param command The command to be rendered.
+ * @param commandKey The key in the map of commands. This is also the string
+ *    that is sent to the device as a command. ex "PWR", "AMT", ...
+ * @param zoneName The name of the zone the command belongs to.
+ *    ex "main", "zone2", ...
+ * @returns Returns a string of code or undefined if code cannot be generated
+ *    for this value.
+ */
+function renderCommand(
+  command: OnkyoDataCommand,
+  commandKey: string,
+  zoneName: string
+): string | undefined {
+  const funcName = toIdentifier(command.name);
+  if (!funcName.match(/^[a-z][a-z0-9]*$/i)) {
+    console.log(`bad command name ${command.name} (${zoneName} ${commandKey})`);
+    return;
+  }
 
-      const valueFuncName = toIdentifier(value.name);
+  const lines = Object.keys(command.values)
+    .map(k => renderValue(command.values[k], k, commandKey, funcName, zoneName))
+    .filter(l => l);
 
-      if (!valueFuncName.match(/^[a-z][a-z0-9]*_?$/i)) {
-        console.log(`bad value name ${value.name} (${name} ${ck} ${vk})`);
-        return;
-      }
-
-      return `
-      /** ${value.description} */
-      export const ${valueFuncName} = () => ${commandFuncName}("${vk}");
-      `;
-    });
-
-    return `
+  return `
     /**
-     * ${command.description}
-     */
-    export function ${commandFuncName}(value: string){
-      return new Packet("${ck}", value);
+      * ${command.description}
+      */
+    export function ${funcName}(value: string){
+      return new Packet("${commandKey}", value);
     }
-    export namespace ${commandFuncName} {
-        ${lines.filter(l => l).join("\n")}
-    }`;
-  });
+    export namespace ${funcName} {
+      ${lines.join("\n")}
+    }
+  `;
+}
 
-  const zone = `
-  import {Packet} from "../protocol";
-  ${lines.join("\n")}
-    `;
+/**
+ * Generates a string of JavaScript code defining a module for this zone.
+ *
+ * @param name The name of the zone the command belongs to.
+ *    ex "main", "zone2", ..
+ * @param commands A map of valid commands for a zone.
+ */
+function renderZone(name: string, commands: OnkyoDataCommandMap): string {
+  const lines = Object.keys(commands)
+    .map(k => renderCommand(commands[k], k, name))
+    .filter(l => l);
 
-  return prettier.format(zone, {parser: "typescript"});
+  return prettier.format(
+    `
+      import {Packet} from "../protocol";
+      ${lines.join("\n")}
+    `,
+    {parser: "typescript"}
+  );
 }
 
 function getOnkyoData(): Promise<OnkyoData> {
@@ -139,7 +215,7 @@ function getOnkyoData(): Promise<OnkyoData> {
     });
 }
 
-async function xmain() {
+async function main() {
   const onkyoData = await getOnkyoData();
 
   const zones = <OnkyoDataZone[]>Object.keys(onkyoData.commands);
@@ -152,15 +228,21 @@ async function xmain() {
     }
   }
 
-  await Promise.all(
-    zones.map(zone => {
+  await Promise.all([
+    ...zones.map(zone => {
       writeFile(
         path.join(commandsDir, `${zone}.ts`),
-        renderCommands(zone, onkyoData.commands[zone]),
+        renderZone(zone, onkyoData.commands[zone]),
         {mode: 0o644}
       );
-    })
-  );
+    }),
+    writeFile(
+      path.join(commandsDir, "index.ts"),
+      zones.map(zone => `import * as ${zone} from "./${zone}";`).join("\n") +
+        `\nexport {${zones.join(", ")}};\n`,
+      {mode: 0o644}
+    )
+  ]);
 }
 
-xmain();
+main();
