@@ -1,6 +1,7 @@
 import dgram from "dgram";
 import net from "net";
 
+import {ContextError} from "./http";
 import {Packet, DISCOVER_BUFFERS, PORT} from "./protocol";
 import {EventEmitter} from "events";
 
@@ -82,18 +83,40 @@ export class Device extends EventEmitter {
     return this.connectPromise;
   }
 
-  send(command: string, parameter: string): void;
-  send(command: Packet): void;
-  send(command: string | Packet, parameter: string = ""): void {
-    if (!this.socket) {
-      throw new Error("device not connected");
-    }
-    const packet =
-      typeof command === "string" ? new Packet(command, parameter) : command;
-    const buf = packet.toBuffer(this.type);
-    if (buf) {
-      this.socket.write(buf);
-    }
+  sendCommand(
+    command: string,
+    parameter: string,
+    timeoutLength?: number
+  ): Promise<any> {
+    const packet = new Packet(command, parameter);
+    return this.send(packet, timeoutLength);
+  }
+
+  send(packet: Packet, timeoutLength: number = 1000): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (!this.socket) {
+        reject(new ContextError("device not connected", 500));
+        return;
+      }
+      let timeout = setTimeout(() => {
+        this.off("data", handleData);
+        reject(new ContextError("command timed out", 504));
+      }, timeoutLength);
+
+      const handleData = (data: Packet) => {
+        if (data.command === packet.command) {
+          clearTimeout(timeout);
+          this.off("data", handleData);
+          resolve(data.parameter);
+        }
+      };
+
+      this.on("data", handleData);
+      const buf = packet.toBuffer(this.type);
+      if (buf) {
+        this.socket.write(buf);
+      }
+    });
   }
 }
 

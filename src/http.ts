@@ -1,6 +1,9 @@
 import http from "http";
+import url from "url";
+import querystring from "querystring";
+
 import {Device} from "./device";
-import {Packet} from "./protocol";
+import {isArray} from "util";
 
 interface Context {
   req: http.IncomingMessage;
@@ -8,7 +11,7 @@ interface Context {
   body: {[key: string]: any};
 }
 
-class ContextError extends Error {
+export class ContextError extends Error {
   constructor(message: string, public code: number = 500) {
     super(message);
   }
@@ -20,9 +23,12 @@ function writeError(
   statusCode: number = 500
 ): void {
   res.writeHead(statusCode, {"Content-Type": "application/json"});
-  res.end(JSON.stringify({error: err}));
+  res.end(JSON.stringify({error: err.toString()}));
 }
 
+/**
+ * Validate that the POST body is valid JSON
+ */
 function requireBody(req: http.IncomingMessage): Promise<any> {
   return new Promise((resolve, reject) => {
     let body = "";
@@ -44,54 +50,91 @@ function requireBody(req: http.IncomingMessage): Promise<any> {
   });
 }
 
-function sendQuery(device: Device, command: string) {
-  return new Promise((resolve, reject) => {
-    let timeout = setTimeout(() => {
-      device.off("data", handleData);
-      reject(new ContextError("command timeout", 504));
-    }, 1000);
-
-    function handleData(data: Packet) {
-      if (data.command === command) {
-        clearTimeout(timeout);
-        device.off("data", handleData);
-        resolve(data.parameter);
-      }
-    }
-
-    device.on("data", handleData);
-    device.send(command, "QSTN");
-  });
+/**
+ * Convience method that makes a query on a device for the passed in command.
+ *
+ * @param device An instance of a Device that will receive and send responses.
+ * @param command The command to be issued the request. (e.g. "MVL", "AMT", ...)
+ * @param timeout An optional integer that specifies a timeout (in ms) to wait
+ *    for a response before timing out. (default is 1000).
+ */
+async function sendQuery(device: Device, command: string, timeout?: number) {
+  return device.sendCommand(command, "QSTN", timeout);
 }
 
-function sendCommand(device: Device, command: string, parameter?: string) {
+/**
+ * Calls the sendCommand method on a device with the passed in parameters.
+ *
+ * @param device An instance of a Device that will receive and send responses.
+ * @param command The command to be issued the request. (e.g. "MVL", "AMT", ...)
+ * @param parameter An optional value that specifies a value/action to be
+ *    applied to a command. (e.g. "01", "UP", ...)
+ * @param timeout An optional integer that specifies a timeout (in ms) to wait
+ *    for a response before timing out. (default is 1000).
+ */
+async function sendCommand(
+  device: Device,
+  command: string,
+  parameter?: string,
+  timeout?: number
+) {
   if (!parameter) {
     throw new ContextError("Parameter is required", 400);
   }
-
-  device.send(command, parameter);
-  return true;
+  return device.sendCommand(command, parameter, timeout);
 }
 
-async function handleCommand(ctx: Context, device: Device) {
-  const command = ((ctx.req.url || "").split("/").pop() || "").toUpperCase();
+/**
+ * Parses incoming HTTP requests and passes the request parameters to an
+ * appropriate function.
+ *
+ * @param ctx Contains the req, res, and optional body.
+ * @param device An instance of a Device that will receive and send responses.
+ * @returns A promise that is resolved with a device response. It will reject
+ *    with an error if the request times out or the device responds with an
+ *    error.
+ */
+async function handleCommand(ctx: Context, device: Device): Promise<any> {
+  var url_parts = url.parse(ctx.req.url || "");
+  const command = (
+    (url_parts.pathname || "").split("/").pop() || ""
+  ).toUpperCase();
+
   if (!command.match(/[A-Z0-9]{3}/)) {
     throw new ContextError("Missing or invalid command", 400);
   }
 
+  const query = querystring.parse(url_parts.query || "");
+  let timeout: number | undefined =
+    query.timeout && !isArray(query.timeout)
+      ? parseInt(query.timeout)
+      : undefined;
+
   switch (ctx.req.method) {
     case "GET":
-      return await sendQuery(device, command);
+      // GET requests are only for queries.
+      return await sendQuery(device, command, timeout);
 
     case "POST":
-      return sendCommand(device, command, ctx.body.parameter);
+      return await sendCommand(device, command, ctx.body.parameter, timeout);
 
     default:
       throw new ContextError("Invalid request method", 405);
   }
 }
 
-export function createDeviceHandler(device: Device, handler = handleCommand) {
+/**
+ * Generates an HTTP handler that has access to a Device instance. It does some
+ * minimal validation on a request before passing a Context and the Device
+ * instance to the passed in callback.
+ *
+ * @param device An instance of a Device that will receive and send responses
+ * @param callback A function that accepts a Context and Device instance and
+ *    should return a promise that resolves to a value that will be sent back
+ *    to the client.
+ * @returns An HTTP handler
+ */
+export function createDeviceHandler(device: Device, callback = handleCommand) {
   return async (req: http.IncomingMessage, res: http.ServerResponse) => {
     let body;
     switch (req.method) {
@@ -107,7 +150,7 @@ export function createDeviceHandler(device: Device, handler = handleCommand) {
 
     try {
       const context = {req, res, body};
-      const value = JSON.stringify(await handler(context, device));
+      const value = JSON.stringify(await callback(context, device));
 
       res.writeHead(200, {"Content-Type": "application/json"});
       res.end(value);

@@ -167,7 +167,8 @@ test("Device.send() should emit a packet to send to the connected socket", async
   const device = new Device("1.2.3.4", PORT, "1");
 
   await device.connect();
-  device.send("MVL", "01");
+
+  device.sendCommand("MVL", "01");
   expect(socket.write.mock.calls).toEqual([
     [new Packet("MVL", "01", "1").toBuffer()]
   ]);
