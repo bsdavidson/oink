@@ -5,7 +5,7 @@ import querystring from "querystring";
 import {Device} from "./device";
 import {isArray} from "util";
 
-interface Context {
+export interface Context {
   req: http.IncomingMessage;
   res: http.ServerResponse;
   body: {[key: string]: any};
@@ -29,7 +29,7 @@ function writeError(
 /**
  * Validate that the POST body is valid JSON
  */
-function requireBody(req: http.IncomingMessage): Promise<any> {
+export function requireBody(req: http.IncomingMessage): Promise<any> {
   return new Promise((resolve, reject) => {
     let body = "";
     req.on("data", buf => {
@@ -58,7 +58,11 @@ function requireBody(req: http.IncomingMessage): Promise<any> {
  * @param timeout An optional integer that specifies a timeout (in ms) to wait
  *    for a response before timing out. (default is 1000).
  */
-async function sendQuery(device: Device, command: string, timeout?: number) {
+export async function sendQuery(
+  device: Device,
+  command: string,
+  timeout?: number
+) {
   return device.sendCommand(command, "QSTN", timeout);
 }
 
@@ -72,7 +76,7 @@ async function sendQuery(device: Device, command: string, timeout?: number) {
  * @param timeout An optional integer that specifies a timeout (in ms) to wait
  *    for a response before timing out. (default is 1000).
  */
-async function sendCommand(
+export async function sendCommand(
   device: Device,
   command: string,
   parameter?: string,
@@ -94,13 +98,16 @@ async function sendCommand(
  *    with an error if the request times out or the device responds with an
  *    error.
  */
-async function handleCommand(ctx: Context, device: Device): Promise<any> {
+export async function handleCommand(
+  ctx: Context,
+  device: Device
+): Promise<any> {
   var url_parts = url.parse(ctx.req.url || "");
   const command = (
     (url_parts.pathname || "").split("/").pop() || ""
   ).toUpperCase();
 
-  if (!command.match(/[A-Z0-9]{3}/)) {
+  if (!command.match(/[A-Z0-9]{3}/) || command.length !== 3) {
     throw new ContextError("Missing or invalid command", 400);
   }
 
@@ -113,10 +120,17 @@ async function handleCommand(ctx: Context, device: Device): Promise<any> {
   switch (ctx.req.method) {
     case "GET":
       // GET requests are only for queries.
-      return await sendQuery(device, command, timeout);
+      return {parameter: await sendQuery(device, command, timeout)};
 
     case "POST":
-      return await sendCommand(device, command, ctx.body.parameter, timeout);
+      return {
+        parameter: await sendCommand(
+          device,
+          command,
+          ctx.body.parameter,
+          timeout
+        )
+      };
 
     default:
       throw new ContextError("Invalid request method", 405);

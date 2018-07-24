@@ -1,7 +1,7 @@
 import dgram from "dgram";
 import net from "net";
 
-import {ContextError} from "./http";
+import {ContextError} from "./api";
 import {Packet, DISCOVER_BUFFERS, PORT} from "./protocol";
 import {EventEmitter} from "events";
 
