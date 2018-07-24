@@ -1,10 +1,11 @@
 {
-  "name": "oink",
-  "version": "0.0.1",
+  "name": "@bsdavidson/oink",
+  "version": "0.1.1",
   "description": "A module for interacting with Onkyo recievers",
   "main": "lib/index.js",
   "author": "Brian Davidson",
   "license": "MIT",
+  "homepage": "https://github.com/bsdavidson/oink",
   "devDependencies": {
     "@types/jest": "^23.3.0",
     "@types/js-yaml": "^3.11.2",
@@ -16,6 +17,7 @@
     "rimraf": "^2.6.2",
     "ts-jest": "^23.0.1",
     "ts-node": "^7.0.0",
+    "ts-node-dev": "^1.0.0-pre.26",
     "typescript": "^2.9.2"
   },
   "scripts": {

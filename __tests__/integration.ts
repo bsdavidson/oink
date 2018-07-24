@@ -114,8 +114,8 @@ describe("createDeviceHandler", () => {
     test("should allow you to query a command", async () => {
       const response = await harness.request("GET", "/MVL?timeout=100");
       expect(response).toEqual({
-        statusCode: 200,
-        body: {parameter: "01"}
+        body: {command: "MVL", deviceType: "1", parameter: "01"},
+        statusCode: 200
       });
     });
 
@@ -136,8 +136,8 @@ describe("createDeviceHandler", () => {
         JSON.stringify({parameter: "DOWN"})
       );
       expect(response).toEqual({
-        statusCode: 200,
-        body: {parameter: "01"}
+        body: {command: "MVL", deviceType: "1", parameter: "01"},
+        statusCode: 200
       });
     });
 

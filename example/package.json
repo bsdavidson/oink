@@ -1,0 +1,10 @@
+{
+  "name": "oink-example",
+  "version": "1.0.0",
+  "description": "An example app using Oink",
+  "main": "main.js",
+  "license": "MIT",
+  "dependencies": {
+    "@bsdavidson/oink": "^0.0.0"
+  }
+}

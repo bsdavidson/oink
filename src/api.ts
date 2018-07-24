@@ -120,17 +120,10 @@ export async function handleCommand(
   switch (ctx.req.method) {
     case "GET":
       // GET requests are only for queries.
-      return {parameter: await sendQuery(device, command, timeout)};
+      return await sendQuery(device, command, timeout);
 
     case "POST":
-      return {
-        parameter: await sendCommand(
-          device,
-          command,
-          ctx.body.parameter,
-          timeout
-        )
-      };
+      return await sendCommand(device, command, ctx.body.parameter, timeout);
 
     default:
       throw new ContextError("Invalid request method", 405);

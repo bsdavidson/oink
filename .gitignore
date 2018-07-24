@@ -1,6 +1,7 @@
-/lib
-/node_modules
-.vscode
-yarn-error.log
-/coverage
+/.vscode
 /.nyc_output
+/coverage
+/lib
+node_modules
+yarn-error.log
+yarn.lock

@@ -107,7 +107,7 @@ export class Device extends EventEmitter {
         if (data.command === packet.command) {
           clearTimeout(timeout);
           this.off("data", handleData);
-          resolve(data.parameter);
+          resolve(data);
         }
       };
 

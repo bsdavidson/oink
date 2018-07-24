@@ -1,4 +1,4 @@
-# Last generated
+# Originally generated
 #   by import_protocol_doc.py
 #   from ISCP_AVR_134.xlsx
 #   at 2017-01-27 20:35:03.115748
@@ -7,6 +7,9 @@
 # automatic import didn't and often can't do right. These changes
 # should be tracked in source control, so they can be merged with
 # new generated versions of the file.
+#
+# This file has been customized for Oink to provide non-conflicting names
+# for easier code generation.
 
 main:
   PWR:
