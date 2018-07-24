@@ -23,13 +23,14 @@
     "clean": "rimraf ./lib",
     "generate": "ts-node ./build/generate-commands.ts",
     "prepublish": "yarn clean && yarn test && yarn build",
-    "test": "jest",
-    "watch": "jest --watch"
+    "test": "jest --coverage",
+    "watch": "jest --coverage --collectCoverageFrom=src/*.ts --watch"
   },
   "jest": {
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
+    "verbose": true,
     "testRegex": "/__tests__/.*\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
